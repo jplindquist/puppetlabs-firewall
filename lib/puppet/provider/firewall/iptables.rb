@@ -443,7 +443,7 @@ Puppet::Type.type(:firewall).provide :iptables, parent: Puppet::Provider::Firewa
     # String#lines would be nice, but we need to support Ruby 1.8.5
     nf_warning_msg = "# Warning: ip6?tables-legacy tables present, use ip6?tables-legacy-save to see them\n"
     iptables_save.gsub(%r{#{nf_warning_msg}}, '').split("\n").each do |line|
-      unless %r{^\#\s+|^\:\S+|^COMMIT|^FATAL}.match?(line)
+      unless %r{^\#\s+|^\:\S+|^COMMIT|^FATAL|^-A (KUBE-)}.match?(line)
         if %r{^\*}.match?(line)
           table = line.sub(%r{\*}, '')
         else
