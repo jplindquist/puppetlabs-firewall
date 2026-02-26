@@ -246,7 +246,7 @@ module PuppetX::Firewall # rubocop:disable Style/ClassAndModuleChildren
       keyword = case match[2]
                 when '1' then 'icmp'
                 when '2' then 'igmp'
-                when '4' then 'ipencap'
+                when '4' then 'ipv4'
                 when '6' then 'tcp'
                 when '7' then 'cbt'
                 when '17' then 'udp'
