@@ -786,6 +786,12 @@ Puppet::Type.type(:firewall).provide :iptables, parent: Puppet::Provider::Firewa
     # Proto should equal 'all' if undefined
     hash[:proto] = 'all' unless hash.include?(:proto)
 
+    # Normalize numeric protocol to name (iptables-nft >= 1.8.11 outputs numeric IDs)
+    # e.g. Map proto 4 => ipv4
+    if hash[:proto] =~ %r{^\d+$}
+      hash[:proto] = File.readlines('/etc/protocols').grep(%r{^\S+\s+#{hash[:proto]}\s}).first&.split&.first || hash[:proto]
+    end
+
     # If the jump parameter is set to one of: ACCEPT, REJECT or DROP then
     # we should set the action parameter instead.
     if ['ACCEPT', 'REJECT', 'DROP'].include?(hash[:jump])
